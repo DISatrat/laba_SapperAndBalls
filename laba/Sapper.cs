@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -47,54 +46,61 @@ namespace Laba4_sapper
         //неправильно выполняется алгоритм при больших n
         public int FindMaxSafeZone()
         {
-            int numRows = field.GetLength(0);
-            int numCols = field.GetLength(1);
-            int maxArea = 0;
+            var a = (int[,])field.Clone();
 
-            for (int i = 0; i < numRows; i++)
+            List<int> allSafeZone = new List<int>();
+
+            for (int i = 0; i < a.GetLength(0); i++)
             {
-                for (int j = 0; j < numCols; j++)
+                for (int j = 0; j < a.GetLength(1); j++)
                 {
-                    if (field[i, j] == 0)
+                    if (a[i, j] == 0)
                     {
-                        int area = ExploreSafeZone(i, j, numRows, numCols);
-                        maxArea = Math.Max(maxArea, area);
+                        allSafeZone.Add(ExploreSafeZone(ref a, i, j));
                     }
+
                 }
             }
-
-            return maxArea;
+            return allSafeZone.Max();
         }
 
-        private int ExploreSafeZone(int row, int col, int numRows, int numCols)
+        private int ExploreSafeZone(ref int[,] mas, int x, int y)
         {
             int maxArea = 0;
-            int height = 0;
 
-            for (int i = row; i < numRows; i++)
+            if (mas[x, y] == 0)
             {
-                if (field[i, col] == 1)
+                mas[x, y] = 1;
+
+                maxArea++;
+                if (x != 0)
                 {
-                    break;
+
+                    maxArea += ExploreSafeZone(ref mas, x - 1, y);
                 }
-
-                int width = 0;
-
-                for (int j = col; j < numCols; j++)
+                if (x != mas.GetLength(0) - 1)
                 {
-                    if (field[i, j] == 1)
-                    {
-                        break;
-                    }
+                    maxArea += ExploreSafeZone(ref mas, x + 1, y);
 
-                    width++;
                 }
+                if (y != 0)
+                {
+                    maxArea += ExploreSafeZone(ref mas, x, y - 1);
 
-                height++;
-                maxArea = Math.Max(maxArea, width * height);
+                }
+                if (y != mas.GetLength(1) - 1)
+                {
+                    maxArea += ExploreSafeZone(ref mas, x, y + 1);
+
+                }
             }
+
+
+
 
             return maxArea;
         }
+
+
     }
 }

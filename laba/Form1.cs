@@ -27,7 +27,7 @@ namespace laba
 
 
             stopWatchSap.Start();
-            sap = new Sapper(30);
+            sap = new Sapper(3);
             InitializeDataGridView();
 
             label2.Text = sap.FindMaxSafeZone().ToString();
@@ -42,6 +42,7 @@ namespace laba
 
 
             stopWatchBalls.Start();
+
             balls = new Balls(5);
 
             int ballCount = balls.BallCount;
@@ -50,13 +51,13 @@ namespace laba
 
             listView1.Items.Clear();
 
-            for (int i = 0; i < ballCount; i++)
-            {
-                ListViewItem item = new ListViewItem();
+            //for (int i = 0; i < ballCount; i++)
+            //{
+            //    ListViewItem item = new ListViewItem();
 
-                item.Text = ballHeights[i].ToString();
-                listView1.Items.Add(item);
-            }
+            //    item.Text = ballHeights[i].ToString();
+            //    listView1.Items.Add(item);
+            //}
             int l = balls.LCM(ballHeights);
             int answer = 604800 / l;
 
@@ -85,7 +86,7 @@ namespace laba
             Series seriesSapper = new Series("Sapper Algorithm");
             seriesSapper.ChartType = SeriesChartType.Spline;
 
-            for (int n = 1; n <= 10; n++)
+            for (int n = 5000; n <= 10000; n+=500)
             {
                 long ballsNTime = TimeTestForAnyNBalls(n); 
                 long sapperNTime = TimeTestForAnyNSapper(n); 

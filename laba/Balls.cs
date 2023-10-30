@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace Laba4_sapper
 {
@@ -52,7 +50,6 @@ namespace Laba4_sapper
 
             return lcm;
         }
-
 
         public int BallCount { get { return ballsHeigh.Length; } }
         public int[] BallHeights { get { return ballsHeigh; } }
