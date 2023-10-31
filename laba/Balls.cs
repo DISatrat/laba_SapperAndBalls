@@ -8,67 +8,95 @@ namespace Laba4_sapper
 {
     internal class Balls
     {
-        private int[] ballsHeigh;
+        //private int[] ballsHeigh;
+        public int direction { get; set; } // 1 - вверх, -1 - вниз
 
-        public Balls(int balls) {
-            
-            ballsHeigh= new int[balls];
+        public int height;
+        public int startHeight { get; set; }
 
-            Random random= new Random();
-
-            for (int i = 0; i < balls; i++)
-            {
-
-                ballsHeigh[i] = random.Next(1,500);
-            }
-        }
-
-        //наименьшее общее кратное
-        public int LCM(int[] numbers)
+        public Balls(int start)
         {
-            int lcm = 1;
+            direction = -1;
 
-            foreach (int number in numbers)
+            startHeight = start;
+            height = start;
+
+            //Random random = new Random();
+
+            //startHeight = random.Next(5, 51);
+            //height = startHeight;
+
+
+        }
+
+
+
+        public static int CountBalls7Days(Balls[] balls)
+        {
+            Random random = new Random();
+            for (int i = 0; i < balls.Length; i++)
             {
-                lcm = GetLCM(lcm, number);
+                balls[i] = new Balls(random.Next(2, 60));
             }
 
-            return lcm;
-        }
+            int count = 0;
 
-       public  int GetLCM(int a, int b)
-        {
-            //int max = Math.Max(a, b);
-            //int min = Math.Min(a, b);
-
-            //int lcm = max;
-
-            //while (lcm % min != 0)
-            //{
-            //    lcm += max;
-            //}
-
-            //return lcm;
-
-
-            return (a * b) / GCD(a, b);
-        }
-
-        //наибольший общий делитель
-        public int GCD(int a, int b)
-        {
-            while (b != 0)
+            for (int i = 0; i < 7; i++) // симулируем неделю
             {
-                int temp = b;
-                b = a % b;
-                a = temp;
+                for (int j = 0; j < 24; j++)
+                {
+                    for (int k = 0; k < 60; k++)
+                    {
+                        for (int l = 0; l < 60; l++)
+                        {
+                            List<int> heights = new List<int>();
+
+                            for (int t = 0; t < balls.Length; t++)
+                            {
+                                if (balls[t].direction == -1) // падение мячика
+                                {
+                                    balls[t].height--;
+                                }
+                                else
+                                {
+                                    balls[t].height++;
+                                }
+
+
+                                if (balls[t].height == 0) // отскок мячика
+                                {
+                                    balls[t].direction = 1;
+                                }
+                                else if (balls[t].height == balls[t].startHeight) // мячик вернулся на исходную высоту
+                                {
+                                    balls[t].direction = -1;
+                                }
+
+                                if (!heights.Contains(balls[t].height))
+                                {
+                                    heights.Add(balls[t].height);
+                                }
+                            }
+
+                            if (heights.Count == 1)
+                            {
+                                count++;
+                            }
+                        }
+                    }
+                }
+
             }
-            return a;
+
+            return count;
         }
 
 
-        public int BallCount { get { return ballsHeigh.Length; } }
-        public int[] BallHeights { get { return ballsHeigh; } }
+
+        //public int BallCount { get { return ballsHeigh.Length; } }
+        //public int[] BallHeights { get { return ballsHeigh; } }
+        public int Height { get { return height; } }
+        public int Diraction { get { return direction; } }
 
     }
 }

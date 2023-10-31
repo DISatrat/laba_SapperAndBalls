@@ -17,7 +17,6 @@ namespace laba
     public partial class Form1 : Form
     {
         private Sapper sap;
-        private Balls balls;
         public Form1()
         {
             InitializeComponent();
@@ -26,46 +25,51 @@ namespace laba
             Stopwatch stopWatchSap = new Stopwatch();
 
 
-            stopWatchSap.Start();
-            sap = new Sapper(3);
+            sap = new Sapper(7);
             InitializeDataGridView();
 
-            label2.Text = sap.FindMaxSafeZone().ToString();
+            label2.Text = sap.MaximalRectangle().ToString();
             stopWatchSap.Stop();
 
             long timeSap = stopWatchSap.ElapsedMilliseconds;
             label1.Text = timeSap + "мс".ToString();
 
 
-            //не считается время
+
             Stopwatch stopWatchBalls = new Stopwatch();
 
-
             stopWatchBalls.Start();
+            
+            Balls[] balls=new Balls[20];
+            
+            int l = Balls.CountBalls7Days(balls);
 
-            balls = new Balls(20);
 
-            int ballCount = balls.BallCount;
+            if (l == 0)
+            {
+                label4.Text = "0";
 
-            int[] ballHeights = balls.BallHeights;
+            }
+            else
+            {
+                label4.Text = (604800 / l).ToString();
+            }
+
 
             listView1.Items.Clear();
 
-            for (int i = 0; i < ballCount; i++)
+            for (int i = 0; i < balls.Length; i++)
             {
                 ListViewItem item = new ListViewItem();
 
-                item.Text = ballHeights[i].ToString();
+                item.Text = balls[i].height.ToString();
                 listView1.Items.Add(item);
             }
-            int l = balls.LCM(ballHeights);
-            int answer = 604800 / l;
 
             stopWatchBalls.Stop();
 
             long ballsTime = stopWatchBalls.ElapsedMilliseconds;
 
-            label4.Text = answer.ToString();
             label3.Text = ballsTime + "мс".ToString();
 
 
@@ -86,10 +90,10 @@ namespace laba
             Series seriesSapper = new Series("Sapper Algorithm");
             seriesSapper.ChartType = SeriesChartType.Spline;
 
-            for (int n = 5000; n <= 10000; n+=500)
+            for (int n = 1; n <= 20; n++)
             {
-                long ballsNTime = TimeTestForAnyNBalls(n); 
-                long sapperNTime = TimeTestForAnyNSapper(n); 
+                long ballsNTime = TimeTestForAnyNBalls(n);
+                long sapperNTime = TimeTestForAnyNSapper(n);
 
                 seriesBalls.Points.AddXY(ballsNTime, n);
                 seriesSapper.Points.AddXY(sapperNTime, n);
@@ -106,39 +110,26 @@ namespace laba
 
         public long TimeTestForAnyNBalls(int n)
         {
-            Stopwatch stopWatchBalls = new Stopwatch();
 
-            stopWatchBalls.Restart();
+            Stopwatch watch = new Stopwatch();
 
-            Balls balls = new Balls(n);
-            int ballCount = balls.BallCount;
+            Balls[] balls = new Balls[n];
+            
+            Balls.CountBalls7Days(balls);
+            watch.Stop();
 
-            int[] ballHeights = balls.BallHeights;
-
-            int l = balls.LCM(ballHeights);
-            int answer = 604800 / l;
-
-            stopWatchBalls.Stop();
-
-            long ballsTime = stopWatchBalls.ElapsedMilliseconds;
-
-            return ballsTime;
+            return watch.ElapsedMilliseconds;
         }
 
         public long TimeTestForAnyNSapper(int n)
         {
             Sapper sap = new Sapper(n);
             Stopwatch stopWatchSap = new Stopwatch();
-
-
             stopWatchSap.Start();
-            sap = new Sapper(5);
-            string s = sap.FindMaxSafeZone().ToString();
+            string s = sap.MaximalRectangle().ToString();
             stopWatchSap.Stop();
 
-            long timeSap = stopWatchSap.ElapsedMilliseconds;
-
-            return timeSap;
+            return stopWatchSap.ElapsedMilliseconds;
         }
 
         private void InitializeDataGridView()
