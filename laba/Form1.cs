@@ -43,7 +43,7 @@ namespace laba
 
             stopWatchBalls.Start();
 
-            balls = new Balls(5);
+            balls = new Balls(20);
 
             int ballCount = balls.BallCount;
 
@@ -51,13 +51,13 @@ namespace laba
 
             listView1.Items.Clear();
 
-            //for (int i = 0; i < ballCount; i++)
-            //{
-            //    ListViewItem item = new ListViewItem();
+            for (int i = 0; i < ballCount; i++)
+            {
+                ListViewItem item = new ListViewItem();
 
-            //    item.Text = ballHeights[i].ToString();
-            //    listView1.Items.Add(item);
-            //}
+                item.Text = ballHeights[i].ToString();
+                listView1.Items.Add(item);
+            }
             int l = balls.LCM(ballHeights);
             int answer = 604800 / l;
 

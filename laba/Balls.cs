@@ -19,12 +19,12 @@ namespace Laba4_sapper
             for (int i = 0; i < balls; i++)
             {
 
-                ballsHeigh[i] = random.Next(1,11);
+                ballsHeigh[i] = random.Next(1,500);
             }
         }
 
-
-        public  int LCM(int[] numbers)
+        //наименьшее общее кратное
+        public int LCM(int[] numbers)
         {
             int lcm = 1;
 
@@ -38,18 +38,34 @@ namespace Laba4_sapper
 
        public  int GetLCM(int a, int b)
         {
-            int max = Math.Max(a, b);
-            int min = Math.Min(a, b);
+            //int max = Math.Max(a, b);
+            //int min = Math.Min(a, b);
 
-            int lcm = max;
+            //int lcm = max;
 
-            while (lcm % min != 0)
-            {
-                lcm += max;
-            }
+            //while (lcm % min != 0)
+            //{
+            //    lcm += max;
+            //}
 
-            return lcm;
+            //return lcm;
+
+
+            return (a * b) / GCD(a, b);
         }
+
+        //наибольший общий делитель
+        public int GCD(int a, int b)
+        {
+            while (b != 0)
+            {
+                int temp = b;
+                b = a % b;
+                a = temp;
+            }
+            return a;
+        }
+
 
         public int BallCount { get { return ballsHeigh.Length; } }
         public int[] BallHeights { get { return ballsHeigh; } }
